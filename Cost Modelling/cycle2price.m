@@ -9,7 +9,7 @@ function [P] = cycle2price( Q )
 %% Calculate price due to electricity consumption
 % Convert into kWh per week
 % ASSUMPTION: 1 cycle consumes 1.6 kWh (from EU A standard 60?C)
-E_cycle = 1.6;      % kWh per cycle
+E_cycle = 1.6;       % kWh per cycle
 E = Q .* E_cycle;    % kWh per week
 
 % Include efficiency of inverter
