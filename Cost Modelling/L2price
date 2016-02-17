@@ -1,0 +1,7 @@
+function [ P ] = L2price(V) %V is the litres of water consumption per week
+
+flow=V/7; %in units of Litres per day
+P=flow2price(flow);
+
+
+end
