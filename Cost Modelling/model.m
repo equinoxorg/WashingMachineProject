@@ -5,6 +5,6 @@ clear
 Q = (0:5:100)';
 P = cycle2price(Q);
 
-plot (Q,P);
+plot (Q,P,'r');
 xlabel('Cycles per Week')
 ylabel('Price per Cycle')
