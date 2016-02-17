@@ -1,0 +1,27 @@
+function [ P ] = Wash_N2price( Wash_N )
+
+%Wash_N2price(Wash_N)
+
+%Rough prompts (disregard)Batima population, opening hours, wash cycle
+%daily laundry demand=BatimaHouseholds*WeeklyLaundryOutput/7
+%Wash_N=daily laundry demand/opening hours/(washing machine capacity/wash cycle)
+%End
+
+%Q is defined as cycles per week
+
+%NOTE: Integration of mass of laundry/day considerations requries
+%combination of this cost analysis with a corresponding demand curve. The
+%definintion of the value of the rate of laundry production of Batima
+%residents would affect both the demand and supply curve.
+
+%Hence: Start with Quantity of cycles demanded
+Q_Day=Q/7; %Total number of cycles demanded in a day.
+
+%Consideration of days allows for 'worst case scenarios'- such as peak
+%demand during weekends
+
+N_req=Q_Day/Open_hr*T_cycle; %Do we want to set 'Open_hr' or 24hrs?
+
+P=av_P_WM*N_req;
+
+end
