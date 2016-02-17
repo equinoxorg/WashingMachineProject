@@ -22,15 +22,13 @@ V= Q .* V_cycle; %L per week
 
 
 % Convert noting that the function returns ($/week)
-P = kWh2price(E)./Q + % $/cycle due to the enrgy consumption
-     L2price(V)./Q + % $/cycle due to water consumption
-     Wash_N2price(Wash_N) + %$/cycle due to number of washing machines installed
-     Q_Misc2price(P) + %Miscellaneous quantity-based costs, scale independent for example laundry detergent supply
-     T_Misc2price(P) + %Miscellaneous time-based costs, scale independent for example construction costs
-     ;
+ P = kWh2price(E)./Q; % + % $/cycle due to the enrgy consumption
+%      L2price(V)./Q + % $/cycle due to water consumption
+%      Wash_N2price(Wash_N) + %$/cycle due to number of washing machines installed
+%      Q_Misc2price(P) + %Miscellaneous quantity-based costs, scale independent for example laundry detergent supply
+%      T_Misc2price(P) + %Miscellaneous time-based costs, scale independent for example construction costs
+%      ;
      
 %% Round price to the nearest cent
 P = round(P.*100)./100;
 end
-
-
