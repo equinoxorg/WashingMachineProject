@@ -54,10 +54,10 @@ b2 = 0;
 A3=[-1,ones(1,366)];
 b3=0;
 
-% Fourth Constraint
-A_4=[zeros(365,1),-1.*ones(365,1),eye(365);
+% Fourth Constraint is -S<C<S, necessary to ensure that max(S) is C
+A4=[zeros(365,1),-1.*ones(365,1),eye(365);
     zeros(365,1),-1.*ones(365,1),-1.*eye(365)];
-b_4=0;
+b4=zeros(365,1);
 
 % Combine Constraints into single matrices
 A = [A1;A2;A3;A4];
