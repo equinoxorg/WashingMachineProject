@@ -50,9 +50,9 @@ b1 = -(1/eta_d)*DD;
 A2 = [0,0,1,zeros(1,363),-1];
 b2 = 0;
 
-% Third Constraint
-A_3=[-1,ones(1,366)];
-b_3=0;
+% Third Constraint is P > 0, i.e. nominal solar panel cannot be less than 0
+A3=[-1,ones(1,366)];
+b3=0;
 
 % Fourth Constraint
 A_4=[zeros(365,1),-1.*ones(365,1),eye(365);
