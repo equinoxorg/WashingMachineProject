@@ -70,7 +70,7 @@ b = [b1;b2;b3;b4];
 % Crop Ed to 364 elements
 Ed_tilda = Ed(1:364);
 
-% M is defined as (-1 1 0 0 ... 0 0)  (364 * 364) matrix
+% M is defined as (-1 1 0 0 ... 0 0)  (364 * 365) matrix
 %                 ( 0-1 1 0 ... 0 0)
 %                 ( 0 0-1 1 ... 0 0)
 %                       ...
