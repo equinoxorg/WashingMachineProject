@@ -50,14 +50,14 @@ b1 = -(1/eta_d)*DD;
 A2 = [0,0,1,zeros(1,363),-1];
 b2 = 0;
 
-% Third Constraint is P > 0, i.e. nominal solar panel cannot be less than 0
-A3=[-1,ones(1,366)];
-b3=0;
+% Third Constraint is P > 0, C > 0, and S[k] > 0, i.e. nominal solar panel, 
+% battery capacity and energy in the battery, cannot be less than 0
+A3 = -eye(367);
+b3 = zeros(367,1);
 
-% Fourth Constraint is -S<C<S, necessary to ensure that max(S) is C
-A4=[zeros(365,1),-1.*ones(365,1),eye(365);
-    zeros(365,1),-1.*ones(365,1),-1.*eye(365)];
-b4=zeros(365,1);
+% Fourth Constraint is S[k]<C, necessary to ensure that max(S) is C
+A4 = [zeros(365,1),-1.*ones(365,1),eye(365)];
+b4 = zeros(365,1);
 
 % Combine Constraints into single matrices
 A = [A1;A2;A3;A4];
@@ -79,10 +79,10 @@ M = [zeros(364,1),eye(364)]-[eye(364),zeros(364,1)];
 
 % Complete the equations
 Aeq= [-eta_c.*Ed_tilda,zeros(364,1),M];
-beq= -(1/eta_d).*DD;
+beq= -(1/eta_d).*DD(1:364);
 
 %% Find optimal solution
-x = linprog(f,A,b,Aeq,beq);
+x = linprog(f,A,b,Aeq,beq); 
 
 % Extract Parameters of interest
 P = x(1);
