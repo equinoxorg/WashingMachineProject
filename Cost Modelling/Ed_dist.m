@@ -1,4 +1,4 @@
-function [Ed] = Ed_dist()
+function [Ed] = Ed_dist(iter)
 % Simplest of possible stochastic modelling for solar panel power
 
 %% Irradiation data from NASA for months going Jan to Dec (kWh/m2/day)
@@ -15,11 +15,11 @@ sigma = (-I_min/50).*I;
 days = [31;28;31;30;31;30;31;31;30;31;30;31;]; 
 
 %% Create Irradiation Vector
-E = zeros(365,1);
+E = zeros(365,iter);
 tot = 0;
 
 for i = 1:12
-    E(tot+1:tot+days(i)) = I(i) + sigma(i)*randn(days(i),1);
+    E(tot+1:tot+days(i),:) = I(i) + sigma(i)*randn(days(i),iter);
     tot = tot + days(i);
 end
 
