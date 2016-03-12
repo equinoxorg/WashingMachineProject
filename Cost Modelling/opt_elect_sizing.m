@@ -54,6 +54,15 @@ for i = 1:iter
 A1 = [-eta_c.*Ed(:,i),zeros(365,1),-eye(365)];
 b1 = -(1/eta_d)*DD;
 
+% % Modified Constraints to allow demand management
+% % Now demand has to be met on a 7 days aggregate
+% T = [eye(359),zeros(359,6)]+[zeros(359,1),eye(359),zeros(359,5)]+...
+%     [zeros(359,2),eye(359),zeros(359,4)]+[zeros(359,3),eye(359),zeros(359,3)]...
+%     +[zeros(359,4),eye(359),zeros(359,2)]+[zeros(359,5),eye(359),zeros(359,1)]...
+%     +[zeros(359,6),eye(359)];
+% A1 = [-eta_c.*T*Ed(:,i),zeros(359,1),-T];
+% b1 = -(1/eta_d)*7*DD(1:359);
+
 % Second constraint is S[1]<S[365], i.e. the energy at the end of the year
 % must be more or equal to the energy at the beginning of the year,
 % otherwise we would accumulate a deficit each year.
@@ -133,6 +142,9 @@ if nargout > 2
             varargout{3} = P;
             if nargout > 5
                 varargout{4} = C;
+                if nargout > 6
+                    varargout{5} = Ed;
+                end
             end
         end
     end
