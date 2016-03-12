@@ -10,12 +10,13 @@ fail_days = 0;
 SS(1) = S0;
 
 for i = 2:365
-   SS(i) = eta_c.*Ed(i).*P + S(i-1) - (1/eta_d).*D;
+   SS(i) = eta_c.*Ed(i-1).*P + SS(i-1) - (1/eta_d).*D;
    
    if (SS(i) > C)
        SS(i) = C;
    elseif (SS(i) < 0)
        fail_days = fail_days + 1; 
+       SS(i) = 0;
    end
 end
 
