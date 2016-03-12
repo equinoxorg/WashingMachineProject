@@ -1,4 +1,4 @@
-function [P, C, fail_rate] = opt_elect_sizing(D, eta_c, eta_d, J_P, J_C)
+function [P_av, C_av, varargout] = opt_elect_sizing(D, eta_c, eta_d, J_P, J_C, iter)
 %% This function solves an optimisation problem to find the minimal battery 
 % and solar panel sizes.
 
@@ -17,9 +17,12 @@ function [P, C, fail_rate] = opt_elect_sizing(D, eta_c, eta_d, J_P, J_C)
 % J_C is the cost per kWh nominal storage capacity of the battery
 
 %% Output Arguments
-% P is the nominal power of solar panels
-% C is the needed capacity of the battery in kWh
-% fail_rate is the expected number of days it will not operate in a year
+% P_av is the nominal power of solar panels (average of all the simulations)
+% C_av is the needed capacity of the battery in kWh (average of all the simulations)
+% (optional) fail_rate is the expected number of days it will not operate in a year
+% (optional) SS defined as the collection of all S[k] as below
+% (optional) P all values calculated
+% (optional) C all values calculated
 
 %% Working variables
 % S[k] is the energy inside the battery on day k
@@ -28,19 +31,27 @@ function [P, C, fail_rate] = opt_elect_sizing(D, eta_c, eta_d, J_P, J_C)
 %% Build cost function f
 f = [J_P,J_C,zeros(1,365)]';
 
-%% Calculate Ed and DD
+%% Calculate Ed and DD and initialize output
 % Ed is a vector containing the ratio of energy per kW nominal power
 % installed for each day in a year
 
-Ed = Ed_dist();
+Ed = Ed_dist(iter);
 DD = ones(365,1).*D;
 
+P = zeros(1,iter);
+C = zeros(1,iter);
+SS = zeros(365,iter);
+
+%% Start big loop
+% TODO: Think of way to not do the loop
+for i = 1:iter
+    
 %% Build inequality constraints
 % First constraint is -eta_c Ed[k] P - S[k] < -(1/eta_d)D[k], i.e. the
 % demand must be less or equal to the total energy into the battery plus
 % the energy already in the battery
 
-A1 = [-eta_c.*Ed,zeros(365,1),-eye(365)];
+A1 = [-eta_c.*Ed(:,i),zeros(365,1),-eye(365)];
 b1 = -(1/eta_d)*DD;
 
 % Second constraint is S[1]<S[365], i.e. the energy at the end of the year
@@ -68,7 +79,7 @@ b = [b1;b2;b3;b4];
 % the system, i.e. S[k] = S[k-1] + eta_c Ed[k-1] P - (1/eta_d)D
 
 % Crop Ed to 364 elements
-Ed_tilda = Ed(1:364);
+Ed_tilda = Ed(1:364,i);
 
 % M is defined as (-1 1 0 0 ... 0 0)  (364 * 365) matrix
 %                 ( 0-1 1 0 ... 0 0)
@@ -85,9 +96,48 @@ beq= -(1/eta_d).*DD(1:364);
 x = linprog(f,A,b,Aeq,beq); 
 
 % Extract Parameters of interest
-P = x(1);
-C = x(2);
-fail_rate = x(3:end);
+P(i) = x(1);
+C(i) = x(2);
+SS(:,i) = x(3:end);
+
+% Check simulation corresponds to optimisation
+[~,SS_check] = sim_year(P(i),C(i),D,eta_c,eta_d,Ed(:,i),SS(1,i));
+
+if norm(SS(:,i)-SS_check)>10^-5
+    warning ('Simulation not equal to optimisation result: N?%d',i);
+end
+
+%% End of big loop
+end
+
+%% Extract output parameters
+P_av = mean(P);
+C_av = mean(C);
+
+%% Calculate the number of days of failure
+fail_tot = 0;
+for i = 1:iter
+    [fail_days,~] = sim_year(P_av,C_av,D,eta_c,eta_d,Ed(:,i),SS(1,i));
+    
+    fail_tot = fail_tot + fail_days;
+end
+
+fail_rate = fail_tot/iter;
+
+% Check optional additional outputs
+if nargout > 2
+    varargout{1} = fail_rate;
+    if nargout > 3
+        varargout{2} = SS;
+        if nargout > 4
+            varargout{3} = P;
+            if nargout > 5
+                varargout{4} = C;
+            end
+        end
+    end
+end
+
 
 end
 
