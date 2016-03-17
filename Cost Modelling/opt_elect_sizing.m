@@ -26,7 +26,7 @@ function [P_av, C_av, varargout] = opt_elect_sizing(D, eta_c, eta_d, J_P, J_C, i
 
 %% Working variables
 % S[k] is the energy inside the battery on day k
-% DD is a vector containing the damand in kWh for each day of the year
+% DD is a vector containing the demand in kWh for each day of the year
 
 %% Build cost function f
 f = [J_P,J_C,zeros(1,365)]';
@@ -95,7 +95,7 @@ for i = 1:iter
     
     % Complete the equations
     A5= [-eta_c.*Ed_tilda,zeros(364,1),M];
-    b5= -(1/eta_d).*DD(1:364);
+    b5= -(1/eta_d).*DD(2:365);
     
     % Combine Constraints into single matrices
     A = [A1;A2;A3;A4;A5];
