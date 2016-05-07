@@ -3,14 +3,14 @@ clear
 close all;
 
 % Define parameters for the estimation
-E_cycle = 1.6;              % kWh per cycle
+E_cycle = 0.6;              % kWh per cycle
 cycles_day = 10;            % Cycles per day
 D = cycles_day * E_cycle;   % Demand
 eta_c = 0.7;                % Efficiency charging
 eta_d = 0.8;                % Efficiency discharging
 J_P = 830/15;               % $ Cost per kW nominal power / years lifetime
 J_C = 167/3;                % $ Cost per kWh nominal capacity / years lifetime
-iter = 100;                  % Number of years simulated
+iter = 10;                  % Number of years simulated
 
 figure; 
 

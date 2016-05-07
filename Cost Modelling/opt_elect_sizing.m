@@ -48,8 +48,8 @@ for i = 1:iter
     
     %% Build inequality constraints
     % First constraint is -eta_c Ed[k] P - S[k] < -(1/eta_d)D[k], i.e. the
-    % demand must be less or equal to the total energy into the battery plus
-    % the energy already in the battery
+    % demand must be less or equal to the total energy going into the 
+    % battery plus the energy already in the battery
     
     A1 = [-eta_c.*Ed(:,i),zeros(365,1),-eye(365)];
     b1 = -(1/eta_d)*DD;
@@ -81,7 +81,7 @@ for i = 1:iter
  
     % The fifth constraint is set to ensure no energy by the system, 
     % i.e. S[k] <= S[k-1] + eta_c Ed[k-1] P - (1/eta_d)D note that energy
-    % must be allowed to be lost or otherwise the capacity will be to great
+    % must be allowed to be lost or otherwise the capacity will be too big
     
     % Crop Ed to 364 elements
     Ed_tilda = Ed(1:364,i);
