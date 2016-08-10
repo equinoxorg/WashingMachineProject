@@ -10,7 +10,7 @@ eta_d = 0.8;                % Efficiency discharging
 J_P = 830/15;               % $ Cost per kW nominal power / years lifetime
 J_C = 167/3;                % $ Cost per kWh nominal capacity / years lifetime
 iter = 10;                  % Number of years simulated
-eta_pump = 0.6;             % Pump efficiency
+eta_pump = 0.8;             % Pump efficiency
 
 %% Calculate water side needs
 % Load Primary rainfall data
@@ -37,7 +37,7 @@ D = cycles_day * E_cycle;               % Cycle electricity
 vol_day1 = av_dailyrainfall*min_roof*1.5;   % Volume of rainwater per day
 vol_day2 = liters_wash * cycles_day;        % Volume of water per day
 pres1 = 1.5;                                % Pressure difference for rainwater pump
-pres2 = 2.5;                                % Pressure difference for membrane pump
+pres2 = 2;                                  % Pressure difference for membrane pump
 pump1_kWh = 1e-3*(vol_day1/eta_pump)*pres1;
 pump2_kWh = 1e-3*(vol_day2/eta_pump)*pres2;
 D = D + pump1_kWh + pump2_kWh;              % Pumping requirements added
