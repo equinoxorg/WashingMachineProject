@@ -36,9 +36,10 @@ D = cycles_day * E_cycle;               % Cycle electricity
 % Pumping energy requirements
 vol_day1 = av_dailyrainfall*min_roof*1.5;   % Volume of rainwater per day
 vol_day2 = liters_wash * cycles_day;        % Volume of water per day
-pres1 = 1.5;                                % Pressure difference for rainwater pump
+pres1 = 1.5;                                % Pressure difference for rainwater pump (bar?)
 pres2 = 2;                                  % Pressure difference for membrane pump
 pump1_kWh = 1e-3*(vol_day1/eta_pump)*pres1;
+%pump1_kWh = 1e-3*(vol_day1/eta_pump)*pres1*100000/1000/3600
 pump2_kWh = 1e-3*(vol_day2/eta_pump)*pres2;
 D = D + pump1_kWh + pump2_kWh;              % Pumping requirements added
 
